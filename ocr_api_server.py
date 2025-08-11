@@ -28,6 +28,27 @@ os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 load_dotenv()
 RAKUTEN_APP_ID = os.getenv("RAKUTEN_APP_ID")
 
+# カレントディレクトリの取得
+cwd = os.getcwd()
+print("=== カレントディレクトリ ===")
+print(cwd)
+print("=== /app の内容 ===")
+print(os.listdir("/app"))
+print("=== det ===")
+print(os.listdir("/app/ch_PP-OCRv3_det_infer"))
+print(os.listdir("./ch_PP-OCRv3_det_infer"))
+print("=== rec ===")
+print(os.listdir("/app/ch_PP-OCRv3_rec_infer"))
+print(os.listdir("./ch_PP-OCRv3_rec_infer"))
+print("=== cls ===")
+print(os.listdir("/app/ch_PP-OCRv3_cls_infer"))
+print(os.listdir("./ch_PP-OCRv3_cls_infer"))
+# カレントディレクトリの中身を一覧表示
+print("=== カレントディレクトリの内容 ===")
+for item in os.listdir(cwd):
+    print(item)
+
+
 # --- DB(SQLite)準備 ---
 # SQLite DB初期化
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -88,6 +109,22 @@ try:
 except Exception as e:
     print("❌ shops.geojsonの読み込みエラー:", e)
 
+
+# --- OCR 初期化 ---
+print("🔍 OCR初期化開始")
+t_ocr_init = time.time()
+ocr = PaddleOCR(
+    det_model_dir='/app/ch_PP-OCRv3_det_infer',   # 検出モデルフォルダ
+    rec_model_dir='/app/ch_PP-OCRv3_rec_infer',   # 認識モデルフォルダ
+    cls_model_dir='/app/ch_PP-OCRv3_cls_infer',   # 角度分類モデル（use_angle_cls=True の場合でも指定可）
+    use_angle_cls=True,
+    lang='japan'
+)
+#        ocr = PaddleOCR(use_angle_cls=True, lang='japan')
+print("🔍 OCR初期化完了")
+print(f"OCR初期化時間: {time.time() - t_ocr_init:.2f}秒")
+
+
 """
 # OCR初期化
 print("🔍 OCR初期化開始")
@@ -127,17 +164,17 @@ print(f"OCR初期化時間: {time.time() - t_ocr_init:.2f}秒")
 def run_ocr_logic(filename):
     try:
         # --- OCR 初期化 ---
-        print("🔍 OCR初期化開始")
-        t_ocr_init = time.time()
-        ocr = PaddleOCR(
-            det_model_dir='/app/ch_PP-OCRv3_det_infer',   # 検出モデルフォルダ
-            rec_model_dir='/app/ch_PP-OCRv3_rec_infer',   # 認識モデルフォルダ
-            cls_model_dir='/app/ch_PP-OCRv3_cls_infer',   # 角度分類モデル（use_angle_cls=True の場合でも指定可）
-            use_angle_cls=True,
-            lang='japan'
-        )
+#        print("🔍 OCR初期化開始")
+#        t_ocr_init = time.time()
+#        ocr = PaddleOCR(
+#            det_model_dir='/app/ch_PP-OCRv3_det_infer',   # 検出モデルフォルダ
+#            rec_model_dir='/app/ch_PP-OCRv3_rec_infer',   # 認識モデルフォルダ
+#            cls_model_dir='/app/ch_PP-OCRv3_cls_infer',   # 角度分類モデル（use_angle_cls=True の場合でも指定可）
+#            use_angle_cls=True,
+#            lang='japan'
+#        )
 #        ocr = PaddleOCR(use_angle_cls=True, lang='japan')
-        print(f"OCR初期化時間: {time.time() - t_ocr_init:.2f}秒")
+#        print(f"OCR初期化時間: {time.time() - t_ocr_init:.2f}秒")
 
         img_path = os.path.join(UPLOAD_FOLDER, filename)
         output_dir = OUTPUT_FOLDER
