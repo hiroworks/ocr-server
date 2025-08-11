@@ -129,7 +129,14 @@ def run_ocr_logic(filename):
         # --- OCR 初期化 ---
         print("🔍 OCR初期化開始")
         t_ocr_init = time.time()
-        ocr = PaddleOCR(use_angle_cls=True, lang='japan')
+        ocr = PaddleOCR(
+            det_model_dir='/app/ch_PP-OCRv3_det_infer',   # 検出モデルフォルダ
+            rec_model_dir='/app/ch_PP-OCRv3_rec_infer',   # 認識モデルフォルダ
+            cls_model_dir='/app/ch_PP-OCRv3_cls_infer',   # 角度分類モデル（use_angle_cls=True の場合でも指定可）
+            use_angle_cls=True,
+            lang='japan'
+        )
+#        ocr = PaddleOCR(use_angle_cls=True, lang='japan')
         print(f"OCR初期化時間: {time.time() - t_ocr_init:.2f}秒")
 
         img_path = os.path.join(UPLOAD_FOLDER, filename)
