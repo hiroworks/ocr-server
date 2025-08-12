@@ -116,8 +116,8 @@ t_ocr_init = time.time()
 ocr = PaddleOCR(
     det_model_dir='/app/ch_PP-OCRv3_det_infer',   # 検出モデルフォルダ
     rec_model_dir='/app/japan_PP-OCRv3_rec_infer',   # 認識モデルフォルダ
-    cls_model_dir='/app/ch_ppocr_mobile_v2.0_cls_infer',   # 角度分類モデル（use_angle_cls=True の場合でも指定可）
-    use_angle_cls=True,
+#    cls_model_dir='/app/ch_ppocr_mobile_v2.0_cls_infer',   # 角度分類モデル（use_angle_cls=True の場合でも指定可）
+    use_angle_cls=False,
     lang='japan'
 )
 #        ocr = PaddleOCR(use_angle_cls=True, lang='japan')
